@@ -1,38 +1,25 @@
 const express = require('express');
-const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const mongoose = require('mongoose');
 const keys = require('./config/keys');
+require('./services/passport');
+
+mongoose.connect(keys.mongoURI);
 
 const app = express();
 
-//google strategy has internal identifier of 'google'
-passport.use(
-    new GoogleStrategy({
-        clientID: keys.googleClientID,
-        clientSecret: keys.googleClientSecret,
-        callbackURL: '/auth/google/callback'
-    }, 
-    (accessToken, refreshToken, profile, done) => {
-        console.log('access token: '+ accessToken);
-        console.log('refresh token: '+refreshToken);
-        console.log(profile);
-    })
-);
-
-app.get(
-    '/auth/google', passport.authenticate('google', {
-        scope: ['profile', 'email']
-    })
-);
-
-app.get('/auth/google/callback', passport.authenticate('google'));
+require('./routes/authRoutes')(app); //invokes the required function with app
 
 //run with 'node index.js'
+// or run with script, 'npm run dev'
 //ctrl + c to stop node
 
 // app.get('/', (req, res) => {
 //     res.send({hi: 'there'});
 // });
+
+//mlab dev database
+//user: admin
+//password: password1
 
 
 
@@ -42,7 +29,7 @@ app.get('/auth/google/callback', passport.authenticate('google'));
 //delete delete something
 //patch update one or two properties of something
 
-const PORT = process.env.PORT || 5000; //port declared by heroku
+const PORT = process.env.PORT || 5000; //port declared by heroku or default
 app.listen(PORT);
 //instructs express to tell node.js (the runtime) to listen to this port
 
