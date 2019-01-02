@@ -17,3 +17,8 @@ app.get('/', (req, res) => {
 const PORT = process.env.PORT || 5000; //port declared by heroku
 app.listen(PORT);
 //instructs express to tell node.js (the runtime) to listen to this port
+
+//releasing on Heroku
+// 'heroku create'
+// outputs the url & the git link
+// git push heroku master
