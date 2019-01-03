@@ -27,11 +27,14 @@ passport.deserializeUser((id, done) => {
 });
 
 //google strategy has internal identifier of 'google'
+//proxy true will keep the https
+//other option is to determine the beginning of the url at runtime with environment check
 passport.use(
     new GoogleStrategy({
         clientID: keys.googleClientID,
         clientSecret: keys.googleClientSecret,
-        callbackURL: '/auth/google/callback'
+        callbackURL: '/auth/google/callback',
+        proxy: true
     }, 
     (accessToken, refreshToken, profile, done) => {
         // this is async, returns a promise
