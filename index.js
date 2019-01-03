@@ -12,6 +12,7 @@ mongoose.connect(keys.mongoURI);
 const app = express();
 
 
+//app.use wires up middleware
 //setup use of cookies, keys takes an array of keys for encryption for extra security
 app.use(
     cookieSession({
@@ -19,6 +20,14 @@ app.use(
         keys: [keys.cookieKey]
     })
 );
+
+//another cookie option: express-session, can store more information, cookie only
+// holds a reference to the session that is looked up so the session info has no size limit
+//has a lot of setup
+
+//cookie-session stores what is needed in the cookie, session is the cookie,
+// in this case only the id of the user
+
 
 app.use(passport.initialize());
 app.use(passport.session());

@@ -53,7 +53,7 @@ passport.use(
 
 passport.use(
     new FacebookStrategy({
-        clientID: keys.facebookClinetID,
+        clientID: keys.facebookClientID,
         clientSecret: keys.facebookClientSecret,
         callbackURL: '/auth/facebook/callback',
         enableProof: true

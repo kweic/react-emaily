@@ -16,9 +16,7 @@ module.exports = app => {
     });
 
     app.get('/api/current_user', (req, res) => {
-        if(!req.user){
-            console.log("no user in req")
-        }
+        //current user from the cookie session
         res.send(req.user);
     });
 };
