@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
-    googleId: String
+    googleId: String,
+    facebookId: String
 });
 
 //mongoose will create if it doesn't see it, or re-use

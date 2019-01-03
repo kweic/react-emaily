@@ -1,14 +1,29 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const cookieSession = require('cookie-session');
+const passport = require('passport');
 const keys = require('./config/keys');
 //user has to require first because it's used in passport
 require('./models/User'); //when app boots up, inform mongoose of this file to make or get users
-require('./services/passport');
 
 
 mongoose.connect(keys.mongoURI);
 
 const app = express();
+
+
+//setup use of cookies, keys takes an array of keys for encryption for extra security
+app.use(
+    cookieSession({
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+        keys: [keys.cookieKey]
+    })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+require('./services/passport');
 
 require('./routes/authRoutes')(app); //invokes the required function with app
 
