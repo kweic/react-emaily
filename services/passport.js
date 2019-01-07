@@ -36,21 +36,18 @@ passport.use(
         callbackURL: '/auth/google/callback',
         proxy: true
     }, 
-    (accessToken, refreshToken, profile, done) => {
+    async (accessToken, refreshToken, profile, done) => {
         // this is async, returns a promise
         //promise is handled with the .then
-        User.findOne({ googleId: profile.id }).then((existingUser) => {
-            if(existingUser){
-                //already have a record with this profile id
-                console.log("found existing user")
-                done(null, existingUser); //first arg is error, no error here
-            } else {
-                console.log("making new user")
-                new User({ googleId: profile.id })
-                    .save()
-                    .then(user => done(null, user));
-            }
-        })
+        const existingUser = await User.findOne({ googleId: profile.id });
+        
+        if(existingUser){
+            //already have a record with this profile id
+            return done(null, existingUser); //first arg is error, no error here
+        }
+
+        const user = await new User({ googleId: profile.id }).save();
+        done(null, user);
     })
 );
 
@@ -61,25 +58,19 @@ passport.use(
         callbackURL: '/auth/facebook/callback',
         enableProof: true
     }, 
-    (accessToken, refreshToken, profile, done) => {
+    async (accessToken, refreshToken, profile, done) => {
         // this is async, returns a promise
         //promise is handled with the .then
-        console.log("did the facebook stuff")
+        const existingUser = User.findOne({ facebookId: profile.id });
+        console.log('Facebook stategy being used');
         console.log(profile)
-        User.findOne({ facebookId: profile.id }).then((existingUser) => {
-            console.log('Facebook stategy being used');
-            console.log(profile)
 
-            if(existingUser){
-                //already have a record with this profile id
-                console.log("found existing user")
-                done(null, existingUser); //first arg is error, no error here
-            } else {
-                console.log("making new user")
-                new User({ facebookId: profile.id })
-                    .save()
-                    .then(user => done(null, user));
-            }
-        })
+        if(existingUser){
+            //already have a record with this profile id
+            return done(null, existingUser); //first arg is error, no error here
+        }
+        
+        const user = await new User({ facebookId: profile.id }).save();
+        done(null, user);
     })
 );
