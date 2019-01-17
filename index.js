@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cookieSession = require('cookie-session');
 const passport = require('passport');
+const bodyParser = require('body-parser');
 const keys = require('./config/keys');
 //user has to require first because it's used in passport
 require('./models/User'); //when app boots up, inform mongoose of this file to make or get users
@@ -10,6 +11,11 @@ require('./models/User'); //when app boots up, inform mongoose of this file to m
 mongoose.connect(keys.mongoURI);
 
 const app = express();
+
+//with bodyParser anytime a post, put, patch or anything with a request body
+// comes in to the application the middleware parses it and
+// assigns to req.body property of incoming request object
+app.use(bodyParser.json());
 
 
 //app.use wires up middleware
@@ -35,6 +41,7 @@ app.use(passport.session());
 require('./services/passport');
 
 require('./routes/authRoutes')(app); //invokes the required function with app
+require('./routes/billingRoutes')(app);
 
 //run with 'node index.js'
 // or run with script, 'npm run dev'
