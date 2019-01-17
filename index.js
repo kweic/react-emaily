@@ -55,6 +55,19 @@ require('./routes/billingRoutes')(app);
 //user: admin
 //password: password1
 
+if (process.env.NODE_ENV === 'production') { //set by heroku
+    //Express will serve production assets, ex: main.js, main.css
+    // if this answers the request then it is finished, otherwise continues past
+    app.use(express.static('client/build'));
+
+    //will serve index.html if route not recognized
+    // nothing from authRoutes, billingRoutes, or client/build recognized
+    const path = require('path');
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+    });
+}
+
 
 
 //get get info
