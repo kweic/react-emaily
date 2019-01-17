@@ -1,13 +1,15 @@
 const keys = require('../config/keys');
 const stripe = require('stripe')(keys.stripeSecretKey);
+const requireLogin = require('../middlewares/requireLogin');
+
 
 //sets up the route for api/stripe
 //passed in is the request handler
+
+//the post can take an arbitrary number of functions to call
+// so requireLogin is a middleware used in this case
 module.exports = app => {
-    app.post('/api/stripe', async (req, res) => {
-        if (!req.user) {
-            return res.status(401).send({ error: 'You must log in.' });
-        }
+    app.post('/api/stripe', requireLogin, async (req, res) => {
         //console.log(req.body)
         // front end 500 is basically an authorization to say we want to charge that amount
         // back end to actually charge that amount
