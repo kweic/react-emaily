@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 const keys = require('./config/keys');
 //user has to require first because it's used in passport
 require('./models/User'); //when app boots up, inform mongoose of this file to make or get users
-
+require('./models/Survey');
 
 mongoose.connect(keys.mongoURI);
 
@@ -42,6 +42,7 @@ require('./services/passport');
 
 require('./routes/authRoutes')(app); //invokes the required function with app
 require('./routes/billingRoutes')(app);
+require('./routes/surveyRoutes')(app);
 
 //run with 'node index.js'
 // or run with script, 'npm run dev'
